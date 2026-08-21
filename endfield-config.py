@@ -444,12 +444,36 @@ def from_raw(name, raw):
 
 
 # ---------- ③ 校验 ----------
+# 受「画面质量」预设档控制的单项键：设置它们需确保游戏处于自定义档才生效。
+# 其余画质键（帧率/纹理/各向异性/垂直同步/色差/队友特效/画质提升后全部等）与
+# 音频、语言设置都是独立设置，不受画面质量档位影响，可直接写入。
+AFFECTED_SUB_KEYS = {
+    "video_quality_effect_1",              # 全局特效质量
+    "video_quality_shadowmap_1",           # 阴影质量
+    "video_quality_volumetricfog_1",       # 体积雾
+    "video_quality_volumetriccloud_1",     # 体积云
+    "video_quality_ao_1",                  # 环境光遮蔽
+    "video_quality_scene_detail_1",        # 场景细节
+    "video_quality_environment_renderfeature_1",  # 环境细节
+    "video_quality_grass_sparsity_1",      # 植被密度
+    "video_quality_screenspacereflection_1",      # 屏幕空间反射
+}
+
 def validate_changes(changes):
     """把 {配置名: 用户值} 标准化为可直接写入的原始整数分组。"""
     validated = {
         "values": {},      # {注册表键名: 原始整数}
         "resolution": {},  # {width/height/fullscreen: int}
+        "custom": None,    # 画面质量档位状态：None=不干预 / 0=预设档 / 1=自定义档
     }
+    # 设置了受预设控制的单项 → 切到自定义档（1）；只设了画面质量预设档 → 预设档（0）。
+    # 自定义档下未设置的单项沿用游戏内基底值，因此无需展开整套预设默认值。
+    has_main = "video_quality_main" in changes
+    has_affected = any(k in changes for k in AFFECTED_SUB_KEYS)
+    if has_affected:
+        validated["custom"] = 1
+    elif has_main:
+        validated["custom"] = 0
     for name, val in changes.items():
         if name == "resolution":
             w, h = resolve_resolution(val)
@@ -491,6 +515,9 @@ def apply_all(validated):
         snap = snapshot_all(key)
         for name, raw in validated["values"].items():
             write_dword(key, name, raw, snap)
+        if validated.get("custom") is not None:
+            # 画面质量档位状态：0=预设档 / 1=自定义档
+            write_dword(key, "video_custom_quality", validated["custom"], snap)
         res = validated["resolution"]
         if "width" in res:
             for k in RES_SYNC_KEYS["width"]:
