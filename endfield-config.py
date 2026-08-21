@@ -35,7 +35,6 @@ CONFIG_KEYS = [
     "video_frame_rate_8",               # 帧率
     "video_quality_effect_1",           # 全局特效质量
     "teammate_skill_effect_strength",   # 队友技能特效质量
-    "teammate_skill_effect_opacity",    # 队友技能特效不透明度
     "video_quality_vsync_v2_2",         # 垂直同步
     "video_quality_shadowmap_1",        # 阴影质量
     "video_texture_quality_1",          # 纹理质量
@@ -72,7 +71,6 @@ KEY_CN = {
     "video_frame_rate_8": "帧率",
     "video_quality_effect_1": "全局特效质量",
     "teammate_skill_effect_strength": "队友技能特效质量",
-    "teammate_skill_effect_opacity": "队友技能特效不透明度",
     "video_quality_vsync_v2_2": "垂直同步",
     "video_quality_shadowmap_1": "阴影质量",
     "video_texture_quality_1": "纹理质量",
@@ -128,10 +126,6 @@ SETTINGS_TABLE = {
     "teammate_skill_effect_strength": {
         "cn": "队友技能特效质量", "kind": "enum", "conf": "todo",
         "allowed": {"低": 3, "中": 2, "高": 1},
-    },
-    "teammate_skill_effect_opacity": {
-        "cn": "队友技能特效不透明度", "kind": "scale", "conf": "infer",
-        "factor": 1000, "min": 0.1, "max": 1.0,
     },
     "video_quality_vsync_v2_2": {
         "cn": "垂直同步", "kind": "switch", "conf": "todo",
