@@ -719,8 +719,8 @@ def _parse_lenient_json(text):
         if not line:
             continue
         line = line.lstrip("{").strip().rstrip(",").rstrip("}").rstrip(",").strip()
-        # 优先 = 分隔：值含冒号时不会被误切
-        sep = "=" if "=" in line else (":" if ":" in line else None)
+        # 优先 = 分隔：值含冒号时不会被误切；其次英文冒号，最后中文冒号
+        sep = next((s for s in ("=", ":", "：") if s in line), None)
         if not sep:
             continue
         key, _, val = line.partition(sep)
