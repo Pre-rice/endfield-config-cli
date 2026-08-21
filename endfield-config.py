@@ -785,7 +785,7 @@ def parse_args(argv=None):
     parser.add_argument("--quiet", action="store_true",
                         help="只输出必要信息，抑制变更摘要。")
     parser.add_argument("--wait-game", action="store_true",
-                        help="若终末地正在运行，等待其退出后再应用设置（避免游戏退出时写回覆盖）。")
+                        help="若终末地正在运行，等待其退出后再应用设置（避免与游戏内设置的实时写回冲突）。")
     return parser.parse_args(argv)
 
 def main(argv=None):
@@ -837,8 +837,10 @@ def main(argv=None):
                     time.sleep(3)
                 info("终末地已退出，继续应用设置。")
             else:
-                warn("检测到终末地正在运行：游戏退出时会把它内存里的设置写回注册表，"
-                     "可能覆盖本次修改。建议先退出游戏再应用。")
+                warn("检测到终末地正在运行：修改会正常写入注册表且不会被游戏退出覆盖，"
+                     "但需重启游戏才会生效（终末地仅在启动时读取注册表）。"
+                     "若之后在游戏内调整设置，游戏会实时写回覆盖。"
+                     "建议先退出游戏再应用，让修改立即生效。")
 
         backup_path = None
         if not args.no_backup:
