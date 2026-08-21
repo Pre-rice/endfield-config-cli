@@ -238,10 +238,10 @@ RES_SYNC_KEYS = {
     "width":  ("Screenmanager Resolution Width", "video_resolution_width"),
     "height": ("Screenmanager Resolution Height", "video_resolution_height"),
 }
-# 显示模式：video_full_screen(0=窗口已标定, 1=全屏推断) + Screenmanager Fullscreen mode(3=窗口已标定, 全屏待标定)
+# 显示模式：video_full_screen(0=窗口/1=全屏) + Screenmanager Fullscreen mode(3=窗口/1=全屏)
 FULLSCREEN_KEYS = [
     ("video_full_screen", 0, 1),
-    ("Screenmanager Fullscreen mode", 3, None),
+    ("Screenmanager Fullscreen mode", 3, 1),
 ]
 BACKUP_DIR = Path(__file__).resolve().parent / "backups"
 DEFAULT_CONFIG = Path(__file__).resolve().parent / "config.json"  # 根目录参考模板

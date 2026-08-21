@@ -54,7 +54,7 @@
 | 内部键名 | 官方中文名 | 合法取值 |
 |---|---|---|
 | `video_quality_main` | 画面质量 | `极低` / `低` / `中` / `高` / `极高`（自定义档须在游戏内调整，外部不可设） |
-| `fullscreen` | 显示模式 | `窗口` / `全屏`（全屏下个别键待标定） |
+| `fullscreen` | 显示模式 | `窗口` / `全屏` |
 | `resolution` | 分辨率 | 字符串 `"宽×高"`，如 `"1920×1080"` |
 | `video_frame_rate_8` | 帧率 | `30` / `60` / `120` |
 | `video_quality_effect_1` | 全局特效质量 | `低` / `中` / `高` / `极高` |
@@ -87,7 +87,7 @@
 | `language_audio` | 游戏语音 | `中文` / `英语` / `日语` / `韩语` |
 | `controller_keyboard_type` | 键盘布局 | `默认` / `德语` / `法语` |
 
-**显示模式**：游戏内的「显示模式」由两个注册表键组成——`video_full_screen` 与 `Screenmanager Fullscreen mode`。两者均已标定「窗口」；「全屏」下 `Screenmanager Fullscreen mode` 的原始值尚未标定，脚本会写入 `video_full_screen` 并跳过未标定的键（附警告）。
+**显示模式**：游戏内的「显示模式」由两个注册表键组成——`video_full_screen` 与 `Screenmanager Fullscreen mode`。两者均已标定：窗口 = 0 / 3，全屏 = 1 / 1。
 
 **分辨率**：宽/高会同步写入四个注册表键（`Screenmanager Resolution Width/Height` + `video_resolution_width/height`）。字符串用 `*` 或 `×` 分隔皆可。
 
@@ -100,7 +100,7 @@
 
 ### 待标定档位
 
-全部档位映射均已标定，表格中的取值可直接使用。仅剩**显示模式「全屏」**下的 `Screenmanager Fullscreen mode` 键尚未标定：写「全屏」时脚本会写入 `video_full_screen` 并跳过该键（附警告）。补标定方法见下文「标定指南」。
+全部档位映射（含显示模式「全屏」）均已标定，表格中的取值可直接使用。
 
 **整数透传**仍保留为通用逃生通道：配置里直接填一个整数（如 `"帧生成": 1000`），脚本会**原样写入**注册表，不做任何换算。高级用户 / 未来新增档位时可用，风险自负。
 
@@ -158,9 +158,9 @@ python endfield_config.py --restore backups\endfield_backup_20260821_211109.json
 python endfield_config.py --rollback
 ```
 
-## 标定指南（补全待标定档位）
+## 标定指南（补标定新档位）
 
-脚本的映射表在 `endfield-config.py` 的 `SETTINGS_TABLE` 中。补全某个待标定档位：
+脚本的映射表在 `endfield-config.py` 的 `SETTINGS_TABLE` 中。为未来新增键补标定档位：
 
 1. 进入游戏，把该设置切到目标档位，然后退出游戏（或保持运行，注册表会实时更新）。
 2. 运行 `python endfield_config.py --read`，记下该设置的「原始」值。
