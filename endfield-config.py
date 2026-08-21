@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 明日方舟：终末地（Arknights: Endfield）外部自动化配置脚本：在游戏外直接修改
-终末地的画面、分辨率、音量、语言等设置。编辑配置文件 → 运行脚本 → 自动写入，
+终末地的画面、分辨率、语言等设置。编辑配置文件 → 运行脚本 → 自动写入，
 无需进游戏手动调。不含解帧功能。
 """
 
@@ -28,18 +28,26 @@ except Exception:
 REG_PATH = r"SOFTWARE\Hypergryph\Endfield"
 
 # ---------- 配置键（对应 config.json 字段，顺序 = 游戏内官方面板顺序） ----------
-# 注：阴影质量/体积雾/体积云/环境光遮蔽/场景细节/环境细节/植被密度/屏幕空间反射/
-#     全局特效质量/队友技能特效质量 等单项注册表无对应键，暂不在配置中暴露。
 CONFIG_KEYS = [
     "video_quality_main",               # 画面质量
     "fullscreen",                       # 显示模式（特殊键：双注册表键）
     "resolution",                       # 分辨率（特殊键：四注册表键）
     "video_frame_rate_8",               # 帧率
+    "video_quality_effect_1",           # 全局特效质量
+    "teammate_skill_effect_strength",   # 队友技能特效质量
     "teammate_skill_effect_opacity",    # 队友技能特效不透明度
     "video_quality_vsync_v2_2",         # 垂直同步
+    "video_quality_shadowmap_1",        # 阴影质量
     "video_texture_quality_1",          # 纹理质量
+    "video_quality_volumetricfog_1",    # 体积雾
+    "video_quality_volumetriccloud_1",  # 体积云
     "video_quality_anisoLevel_1",       # 各向异性采样
+    "video_quality_ao_1",               # 环境光遮蔽
+    "video_quality_scene_detail_1",     # 场景细节
+    "video_quality_environment_renderfeature_1",  # 环境细节
+    "video_quality_grass_sparsity_1",   # 植被密度
     "video_quality_chromatic_aberration_1",  # 色差
+    "video_quality_screenspacereflection_1",  # 屏幕空间反射
     "video_quality_upscaler_2",         # 画质提升
     "video_quality_dlss_mode_1",        # DLSS超分辨模式
     "video_quality_sharpness_1",        # 锐化程度
@@ -47,10 +55,6 @@ CONFIG_KEYS = [
     "video_quality_dlssg_mode_1",       # DLSS帧生成模式
     "video_quality_reflex_1",           # NVIDIA Reflex
     "video_quality_contactshadow_1",    # 接触阴影
-    "audio_global",                     # 总音量
-    "audio_voice",                      # 语音音量
-    "audio_music",                      # 音乐音量
-    "audio_sfx",                        # 音效音量
     "audio_suite_mode",                 # 输出模式
     "audio_suspend_unfocused",          # 非当前窗口时静音
     "audio_controller",                 # 控制器喇叭
@@ -66,22 +70,28 @@ KEY_CN = {
     "fullscreen": "显示模式",
     "resolution": "分辨率",
     "video_frame_rate_8": "帧率",
+    "video_quality_effect_1": "全局特效质量",
+    "teammate_skill_effect_strength": "队友技能特效质量",
     "teammate_skill_effect_opacity": "队友技能特效不透明度",
     "video_quality_vsync_v2_2": "垂直同步",
+    "video_quality_shadowmap_1": "阴影质量",
     "video_texture_quality_1": "纹理质量",
+    "video_quality_volumetricfog_1": "体积雾",
+    "video_quality_volumetriccloud_1": "体积云",
     "video_quality_anisoLevel_1": "各向异性采样",
+    "video_quality_ao_1": "环境光遮蔽",
+    "video_quality_scene_detail_1": "场景细节",
+    "video_quality_environment_renderfeature_1": "环境细节",
+    "video_quality_grass_sparsity_1": "植被密度",
     "video_quality_chromatic_aberration_1": "色差",
+    "video_quality_screenspacereflection_1": "屏幕空间反射",
     "video_quality_upscaler_2": "画质提升",
     "video_quality_dlss_mode_1": "DLSS超分辨模式",
     "video_quality_sharpness_1": "锐化程度",
     "video_quality_framegen_1": "帧生成",
     "video_quality_dlssg_mode_1": "DLSS帧生成模式",
-    "video_quality_reflex_1": "NVIDIA Reflex",
+    "video_quality_reflex_1": "NVIDIA Reflex 低延迟",
     "video_quality_contactshadow_1": "接触阴影",
-    "audio_global": "总音量",
-    "audio_voice": "语音音量",
-    "audio_music": "音乐音量",
-    "audio_sfx": "音效音量",
     "audio_suite_mode": "输出模式",
     "audio_suspend_unfocused": "非当前窗口时静音",
     "audio_controller": "控制器喇叭",
@@ -97,19 +107,27 @@ KNOWN_CN = set(KEY_CN.values())                   # 允许的中文键名
 # ---------- 设置映射表（核心） ----------
 # 每项：
 #   cn      中文名
-#   kind    enum（档位映射）/ switch（开/关）/ scale（小数×factor）/ reverse（反向）
+#   kind    enum（档位映射）/ switch（开/关）/ scale（小数×factor）
 #   conf    anchored（已标定）/ infer（推断，待验证）/ todo（待标定）
 #   allowed 档位 → 注册表原始值（None = 尚未标定，选中即报错）
-#   factor  scale 用的放大倍数；min/max scale 与 reverse 用的范围
+#   factor  scale 用的放大倍数；min/max scale 用的范围
 # 未标定档位的逃生通道：配置里直接填整数 = 原始值透传（原样写注册表）。
 SETTINGS_TABLE = {
     "video_quality_main": {
         "cn": "画面质量", "kind": "enum", "conf": "anchored",
-        "allowed": {"自定义": None, "极低": None, "低": None, "中": None, "高": 2, "极高": None},
+        "allowed": {"自定义": None, "极低": 5, "低": 4, "中": 3, "高": 2, "极高": 1},
     },
     "video_frame_rate_8": {
         "cn": "帧率", "kind": "enum", "conf": "anchored",
-        "allowed": {"30": 1000, "60": 2000, "120": 3000},
+        "allowed": {"30": 3000, "60": 2000, "120": 1000},
+    },
+    "video_quality_effect_1": {
+        "cn": "全局特效质量", "kind": "enum", "conf": "todo",
+        "allowed": {"低": 4000, "中": 3000, "高": 2000, "极高": 1000},
+    },
+    "teammate_skill_effect_strength": {
+        "cn": "队友技能特效质量", "kind": "enum", "conf": "todo",
+        "allowed": {"低": 3, "中": 2, "高": 1},
     },
     "teammate_skill_effect_opacity": {
         "cn": "队友技能特效不透明度", "kind": "scale", "conf": "infer",
@@ -117,19 +135,51 @@ SETTINGS_TABLE = {
     },
     "video_quality_vsync_v2_2": {
         "cn": "垂直同步", "kind": "switch", "conf": "todo",
-        "allowed": {"开": None, "关": None},
+        "allowed": {"开": 1000, "关": 0},
+    },
+    "video_quality_shadowmap_1": {
+        "cn": "阴影质量", "kind": "enum", "conf": "todo",
+        "allowed": {"极低": 4000, "低": 3000, "中": 2000, "高": 1000},
     },
     "video_texture_quality_1": {
         "cn": "纹理质量", "kind": "enum", "conf": "anchored",
-        "allowed": {"低": None, "中": None, "高": 1000},
+        "allowed": {"低": 3000, "中": 2000, "高": 1000},
+    },
+    "video_quality_volumetricfog_1": {
+        "cn": "体积雾", "kind": "enum", "conf": "todo",
+        "allowed": {"关闭": 5000, "低": 4000, "中": 3000, "高": 2000, "极高": 1000},
+    },
+    "video_quality_volumetriccloud_1": {
+        "cn": "体积云", "kind": "enum", "conf": "todo",
+        "allowed": {"极低": 5000, "低": 4000, "中": 3000, "高": 2000, "极高": 1000},
     },
     "video_quality_anisoLevel_1": {
         "cn": "各向异性采样", "kind": "enum", "conf": "anchored",
-        "allowed": {"x1": 1000, "x2": 2000, "x4": 4000, "x8": 8000},
+        "allowed": {"x1": 1000, "x2": 2000, "x4": 3000, "x8": 4000},
+    },
+    "video_quality_ao_1": {
+        "cn": "环境光遮蔽", "kind": "enum", "conf": "todo",
+        "allowed": {"极低": 4000, "低": 3000, "中": 2000, "高": 1000},
+    },
+    "video_quality_scene_detail_1": {
+        "cn": "场景细节", "kind": "enum", "conf": "todo",
+        "allowed": {"低": 4000, "中": 3000, "高": 2000, "极高": 1000},
+    },
+    "video_quality_environment_renderfeature_1": {
+        "cn": "环境细节", "kind": "enum", "conf": "todo",
+        "allowed": {"低": 3000, "中": 2000, "高": 1000},
+    },
+    "video_quality_grass_sparsity_1": {
+        "cn": "植被密度", "kind": "enum", "conf": "todo",
+        "allowed": {"低": 2000, "高": 1000},
     },
     "video_quality_chromatic_aberration_1": {
         "cn": "色差", "kind": "switch", "conf": "todo",
-        "allowed": {"开": None, "关": None},
+        "allowed": {"开": 1, "关": 0},
+    },
+    "video_quality_screenspacereflection_1": {
+        "cn": "屏幕空间反射", "kind": "enum", "conf": "todo",
+        "allowed": {"关闭": 5000, "低": 4000, "中": 3000, "高": 2000, "极高": 1000},
     },
     "video_quality_upscaler_2": {
         "cn": "画质提升", "kind": "enum", "conf": "anchored",
@@ -137,7 +187,7 @@ SETTINGS_TABLE = {
     },
     "video_quality_dlss_mode_1": {
         "cn": "DLSS超分辨模式", "kind": "enum", "conf": "todo",
-        "allowed": {"DLAA": None, "质量": None, "平衡": None, "性能": None, "超级性能": None},
+        "allowed": {"DLAA": 5000, "质量": 4000, "平衡": 3000, "性能": 2000, "超级性能": 1000},
     },
     "video_quality_sharpness_1": {
         "cn": "锐化程度", "kind": "scale", "conf": "anchored",
@@ -145,51 +195,47 @@ SETTINGS_TABLE = {
     },
     "video_quality_framegen_1": {
         "cn": "帧生成", "kind": "enum", "conf": "todo",
-        "allowed": {"FSR3 Frame Generation": None, "DLSS Frame Generation": None, "关闭": None},
+        "allowed": {"FSR3 Frame Generation": 3000, "DLSS Frame Generation": 2000, "关闭": 1000},
     },
     "video_quality_dlssg_mode_1": {
         "cn": "DLSS帧生成模式", "kind": "enum", "conf": "todo",
-        "allowed": {"自动": None, "2x": None, "3x": None, "4x": None},
+        "allowed": {"自动": 1000, "2x": 2000, "3x": 3000, "4x": 4000},
     },
     "video_quality_reflex_1": {
-        "cn": "NVIDIA Reflex", "kind": "enum", "conf": "todo",
-        "allowed": {"开启+增强": None, "开启": None, "关闭": None},
+        "cn": "NVIDIA Reflex 低延迟", "kind": "enum", "conf": "todo",
+        "allowed": {"开启+增强": 3000, "开启": 2000, "关闭": 1000},
     },
     "video_quality_contactshadow_1": {
         "cn": "接触阴影", "kind": "switch", "conf": "todo",
-        "allowed": {"开": None, "关": None},
+        "allowed": {"开": 1, "关": 0},
     },
-    "audio_global": {"cn": "总音量", "kind": "reverse", "conf": "anchored", "min": 0, "max": 10},
-    "audio_voice": {"cn": "语音音量", "kind": "reverse", "conf": "anchored", "min": 0, "max": 10},
-    "audio_music": {"cn": "音乐音量", "kind": "reverse", "conf": "anchored", "min": 0, "max": 10},
-    "audio_sfx": {"cn": "音效音量", "kind": "reverse", "conf": "anchored", "min": 0, "max": 10},
     "audio_suite_mode": {
         "cn": "输出模式", "kind": "enum", "conf": "anchored",
-        "allowed": {"桌面音箱": None, "家庭影院": None, "电视": None, "耳机": 1},
+        "allowed": {"桌面音箱": 4, "家庭影院": 3, "电视": 2, "耳机": 1},
     },
     "audio_suspend_unfocused": {
         "cn": "非当前窗口时静音", "kind": "switch", "conf": "todo",
-        "allowed": {"开": None, "关": None},
+        "allowed": {"开": 1, "关": 0},
     },
     "audio_controller": {
         "cn": "控制器喇叭", "kind": "switch", "conf": "todo",
-        "allowed": {"开": None, "关": None},
+        "allowed": {"开": 1, "关": 0},
     },
     "audio_spatial": {
         "cn": "空间音频渲染", "kind": "switch", "conf": "todo",
-        "allowed": {"开": None, "关": None},
+        "allowed": {"开": 1, "关": 0},
     },
     "language_text_change": {
         "cn": "游戏语言", "kind": "enum", "conf": "todo",
-        "allowed": {},  # 选项未提供，README 标注待确认；可填整数原始值透传
+        "allowed": {"简体中文": 0, "英语": 1, "日语": 2, "韩语": 3, "繁体中文": 4},  # 只标定部分
     },
     "language_audio": {
         "cn": "游戏语音", "kind": "enum", "conf": "anchored",
-        "allowed": {"中文": 1, "英语": None, "日语": None, "韩语": None},
+        "allowed": {"中文": 1, "英语": 2, "日语": 3, "韩语": 4},
     },
     "controller_keyboard_type": {
         "cn": "键盘布局", "kind": "enum", "conf": "todo",
-        "allowed": {"默认": None, "德语": None, "法语": None},
+        "allowed": {"默认": 1, "德语": 2, "法语": 3},
     },
 }
 
@@ -339,18 +385,6 @@ def to_raw(name, val):
     kind = spec["kind"]
     cn = spec["cn"]
 
-    if kind == "reverse":
-        # 音量反向：游戏内滑块 0~10 → 存储 10-滑块值（真机校准，存储 0 = 滑块 10）
-        if _is_bool(val):
-            raise UserError(f"「{cn}」须为 {spec['min']}~{spec['max']} 的整数。")
-        try:
-            iv = int(val)
-        except (TypeError, ValueError):
-            raise UserError(f"「{cn}」须为 {spec['min']}~{spec['max']} 的整数，当前为 '{val}'。")
-        if not (spec["min"] <= iv <= spec["max"]):
-            raise UserError(f"「{cn}」应在 {spec['min']}~{spec['max']} 之间，当前为 '{iv}'。")
-        return spec["max"] - iv
-
     if kind == "scale":
         # 整数直接透传（逃生通道）；小数按 factor 放大
         if not _is_bool(val) and isinstance(val, int):
@@ -410,8 +444,6 @@ def from_raw(name, raw):
             if r == raw:
                 return cn
         return f"{raw}（未标定档位）"
-    if kind == "reverse":
-        return str(spec["max"] - raw)
     if kind == "scale":
         return str(raw / spec["factor"])
     return str(raw)
