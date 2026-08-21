@@ -1,0 +1,14 @@
+# Python 编译缓存
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# 运行备份（含个人设置快照，不应入库）
+backups/
+
+# 自定义配置文件（根目录 config.json 作为参考模板保留入库）
+config/
+
+# 测试临时文件
+_test_*.json
+_t?.json
