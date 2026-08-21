@@ -110,6 +110,8 @@ KNOWN_CN = set(KEY_CN.values())                   # 允许的中文键名
 #   allowed 档位 → 注册表原始值（None = 尚未标定，选中即报错）
 #   factor  scale 用的放大倍数；min/max scale 用的范围
 # 未标定档位的逃生通道：配置里直接填整数 = 原始值透传（原样写注册表）。
+# 画面质量「自定义」档：无固定档位值（由受控的 9 个单项决定）。选它 = 置自定义状态键，不写主键。
+CUSTOM_QUALITY = "自定义"
 SETTINGS_TABLE = {
     "video_quality_main": {
         "cn": "画面质量", "kind": "enum", "conf": "anchored",
@@ -462,18 +464,22 @@ AFFECTED_SUB_KEYS = {
 def validate_changes(changes):
     """把 {配置名: 用户值} 标准化为可直接写入的原始整数分组。"""
     validated = {
-        "values": {},      # {注册表键名: 原始整数}
-        "resolution": {},  # {width/height/fullscreen: int}
-        "custom": None,    # 画面质量档位状态：None=不干预 / 0=预设档 / 1=自定义档
+        "values": {},          # {注册表键名: 原始整数}
+        "resolution": {},      # {width/height/fullscreen: int}
+        "custom": None,        # 画面质量档位状态：None=不干预 / 0=预设档 / 1=自定义档
+        "custom_quality": False,  # 显式设了「画面质量=自定义」：True
     }
-    # 设置了受预设控制的单项 → 切到自定义档（1）；只设了画面质量预设档 → 预设档（0）。
+    # 设置了受预设控制的单项、或显式切自定义档 → 自定义状态（1）；只设了画面质量预设档 → 预设档（0）。
     # 自定义档下未设置的单项沿用游戏内基底值，因此无需展开整套预设默认值。
     has_main = "video_quality_main" in changes
     has_affected = any(k in changes for k in AFFECTED_SUB_KEYS)
-    if has_affected:
+    want_custom = has_main and changes["video_quality_main"] == CUSTOM_QUALITY
+    if has_affected or want_custom:
         validated["custom"] = 1
     elif has_main:
         validated["custom"] = 0
+    if want_custom:
+        validated["custom_quality"] = True
     for name, val in changes.items():
         if name == "resolution":
             w, h = resolve_resolution(val)
@@ -481,6 +487,8 @@ def validate_changes(changes):
             validated["resolution"]["height"] = h
         elif name == "fullscreen":
             validated["resolution"]["fullscreen"] = resolve_fullscreen(val)
+        elif name == "video_quality_main" and val == CUSTOM_QUALITY:
+            continue  # 自定义档：只置状态键，不写主键（保留当前预设档值）
         elif name in SETTINGS_TABLE:
             validated["values"][name] = to_raw(name, val)
         else:
@@ -565,6 +573,8 @@ def print_summary(validated, backup_path):
             print(f"  · 分辨率 → {res['width']}*{res['height']}")
         if "fullscreen" in res:
             print(f"  · 显示模式 → {'全屏' if res['fullscreen'] else '窗口'}")
+    if validated.get("custom_quality"):
+        print("  · 画面质量 → 自定义档（video_custom_quality=1，未改主键）")
     order = {k: i for i, k in enumerate(CONFIG_KEYS)}
     for name in sorted(validated["values"], key=lambda k: order.get(k, 999)):
         spec = SETTINGS_TABLE[name]
