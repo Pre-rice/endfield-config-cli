@@ -120,19 +120,19 @@ SETTINGS_TABLE = {
         "allowed": {"30": 3000, "60": 2000, "120": 1000},
     },
     "video_quality_effect_1": {
-        "cn": "全局特效质量", "kind": "enum", "conf": "todo",
+        "cn": "全局特效质量", "kind": "enum", "conf": "anchored",
         "allowed": {"低": 4000, "中": 3000, "高": 2000, "极高": 1000},
     },
     "teammate_skill_effect_strength": {
-        "cn": "队友技能特效质量", "kind": "enum", "conf": "todo",
+        "cn": "队友技能特效质量", "kind": "enum", "conf": "anchored",
         "allowed": {"低": 3, "中": 2, "高": 1},
     },
     "video_quality_vsync_v2_2": {
-        "cn": "垂直同步", "kind": "switch", "conf": "todo",
+        "cn": "垂直同步", "kind": "switch", "conf": "anchored",
         "allowed": {"开": 1000, "关": 0},
     },
     "video_quality_shadowmap_1": {
-        "cn": "阴影质量", "kind": "enum", "conf": "todo",
+        "cn": "阴影质量", "kind": "enum", "conf": "anchored",
         "allowed": {"极低": 4000, "低": 3000, "中": 2000, "高": 1000},
     },
     "video_texture_quality_1": {
@@ -140,11 +140,11 @@ SETTINGS_TABLE = {
         "allowed": {"低": 3000, "中": 2000, "高": 1000},
     },
     "video_quality_volumetricfog_1": {
-        "cn": "体积雾", "kind": "enum", "conf": "todo",
+        "cn": "体积雾", "kind": "enum", "conf": "anchored",
         "allowed": {"关闭": 5000, "低": 4000, "中": 3000, "高": 2000, "极高": 1000},
     },
     "video_quality_volumetriccloud_1": {
-        "cn": "体积云", "kind": "enum", "conf": "todo",
+        "cn": "体积云", "kind": "enum", "conf": "anchored",
         "allowed": {"极低": 5000, "低": 4000, "中": 3000, "高": 2000, "极高": 1000},
     },
     "video_quality_anisoLevel_1": {
@@ -152,27 +152,27 @@ SETTINGS_TABLE = {
         "allowed": {"x1": 1000, "x2": 2000, "x4": 3000, "x8": 4000},
     },
     "video_quality_ao_1": {
-        "cn": "环境光遮蔽", "kind": "enum", "conf": "todo",
+        "cn": "环境光遮蔽", "kind": "enum", "conf": "anchored",
         "allowed": {"极低": 4000, "低": 3000, "中": 2000, "高": 1000},
     },
     "video_quality_scene_detail_1": {
-        "cn": "场景细节", "kind": "enum", "conf": "todo",
+        "cn": "场景细节", "kind": "enum", "conf": "anchored",
         "allowed": {"低": 4000, "中": 3000, "高": 2000, "极高": 1000},
     },
     "video_quality_environment_renderfeature_1": {
-        "cn": "环境细节", "kind": "enum", "conf": "todo",
+        "cn": "环境细节", "kind": "enum", "conf": "anchored",
         "allowed": {"低": 3000, "中": 2000, "高": 1000},
     },
     "video_quality_grass_sparsity_1": {
-        "cn": "植被密度", "kind": "enum", "conf": "todo",
+        "cn": "植被密度", "kind": "enum", "conf": "anchored",
         "allowed": {"低": 2000, "高": 1000},
     },
     "video_quality_chromatic_aberration_1": {
-        "cn": "色差", "kind": "switch", "conf": "todo",
+        "cn": "色差", "kind": "switch", "conf": "anchored",
         "allowed": {"开": 1, "关": 0},
     },
     "video_quality_screenspacereflection_1": {
-        "cn": "屏幕空间反射", "kind": "enum", "conf": "todo",
+        "cn": "屏幕空间反射", "kind": "enum", "conf": "anchored",
         "allowed": {"关闭": 5000, "低": 4000, "中": 3000, "高": 2000, "极高": 1000},
     },
     "video_quality_upscaler_2": {
@@ -180,7 +180,7 @@ SETTINGS_TABLE = {
         "allowed": {"NVIDIA DLSS": 1000, "TAAU": 2000, "AMD FSR3": 3000},
     },
     "video_quality_dlss_mode_1": {
-        "cn": "DLSS超分辨模式", "kind": "enum", "conf": "todo",
+        "cn": "DLSS超分辨模式", "kind": "enum", "conf": "anchored",
         "allowed": {"DLAA": 5000, "质量": 4000, "平衡": 3000, "性能": 2000, "超级性能": 1000},
     },
     "video_quality_sharpness_1": {
@@ -188,19 +188,19 @@ SETTINGS_TABLE = {
         "factor": 1000, "min": 0.0, "max": 1.0,
     },
     "video_quality_framegen_1": {
-        "cn": "帧生成", "kind": "enum", "conf": "todo",
+        "cn": "帧生成", "kind": "enum", "conf": "anchored",
         "allowed": {"FSR3 Frame Generation": 3000, "DLSS Frame Generation": 2000, "关闭": 1000},
     },
     "video_quality_dlssg_mode_1": {
-        "cn": "DLSS帧生成模式", "kind": "enum", "conf": "todo",
+        "cn": "DLSS帧生成模式", "kind": "enum", "conf": "anchored",
         "allowed": {"自动": 1000, "2x": 2000, "3x": 3000, "4x": 4000},
     },
     "video_quality_reflex_1": {
-        "cn": "NVIDIA Reflex 低延迟", "kind": "enum", "conf": "todo",
+        "cn": "NVIDIA Reflex 低延迟", "kind": "enum", "conf": "anchored",
         "allowed": {"开启+增强": 3000, "开启": 2000, "关闭": 1000},
     },
     "video_quality_contactshadow_1": {
-        "cn": "接触阴影", "kind": "switch", "conf": "todo",
+        "cn": "接触阴影", "kind": "switch", "conf": "anchored",
         "allowed": {"开": 1, "关": 0},
     },
     "audio_suite_mode": {
@@ -208,27 +208,27 @@ SETTINGS_TABLE = {
         "allowed": {"桌面音箱": 4, "家庭影院": 3, "电视": 2, "耳机": 1},
     },
     "audio_suspend_unfocused": {
-        "cn": "非当前窗口时静音", "kind": "switch", "conf": "todo",
+        "cn": "非当前窗口时静音", "kind": "switch", "conf": "anchored",
         "allowed": {"开": 1, "关": 0},
     },
     "audio_controller": {
-        "cn": "控制器喇叭", "kind": "switch", "conf": "todo",
+        "cn": "控制器喇叭", "kind": "switch", "conf": "anchored",
         "allowed": {"开": 1, "关": 0},
     },
     "audio_spatial": {
-        "cn": "空间音频渲染", "kind": "switch", "conf": "todo",
+        "cn": "空间音频渲染", "kind": "switch", "conf": "anchored",
         "allowed": {"开": 1, "关": 0},
     },
     "language_text_change": {
-        "cn": "游戏语言", "kind": "enum", "conf": "todo",
-        "allowed": {"简体中文": 0, "英语": 1, "日语": 2, "韩语": 3, "繁体中文": 4},  # 只标定部分
+        "cn": "游戏语言", "kind": "enum", "conf": "anchored",
+        "allowed": {"简体中文": 0, "英语": 1, "日语": 2, "韩语": 3, "繁体中文": 4},
     },
     "language_audio": {
         "cn": "游戏语音", "kind": "enum", "conf": "anchored",
         "allowed": {"中文": 1, "英语": 2, "日语": 3, "韩语": 4},
     },
     "controller_keyboard_type": {
-        "cn": "键盘布局", "kind": "enum", "conf": "todo",
+        "cn": "键盘布局", "kind": "enum", "conf": "anchored",
         "allowed": {"默认": 1, "德语": 2, "法语": 3},
     },
 }

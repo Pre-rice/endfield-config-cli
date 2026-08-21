@@ -60,9 +60,9 @@
 | `video_quality_effect_1` | 全局特效质量 | `低` / `中` / `高` / `极高` |
 | `teammate_skill_effect_strength` | 队友技能特效质量 | `低` / `中` / `高`（1/2/3 编码，非 ×1000） |
 | `teammate_skill_effect_opacity` | 队友技能特效不透明度 | ❌ 不可用（见下文「无法外部修改」） |
-| `video_quality_vsync_v2_2` | 垂直同步 | `开` / `关`（待标定） |
+| `video_quality_vsync_v2_2` | 垂直同步 | `开` / `关` |
 | `video_quality_shadowmap_1` | 阴影质量 | `极低` / `低` / `中` / `高` |
-| `video_texture_quality_1` | 纹理质量 | `低` / `中` / `高`（仅 `高` 已标定） |
+| `video_texture_quality_1` | 纹理质量 | `低` / `中` / `高` |
 | `video_quality_volumetricfog_1` | 体积雾 | `关闭` / `低` / `中` / `高` / `极高` |
 | `video_quality_volumetriccloud_1` | 体积云 | `极低` / `低` / `中` / `高` / `极高` |
 | `video_quality_anisoLevel_1` | 各向异性采样 | `x1` / `x2` / `x4` / `x8` |
@@ -73,19 +73,19 @@
 | `video_quality_chromatic_aberration_1` | 色差 | `开` / `关`（待标定） |
 | `video_quality_screenspacereflection_1` | 屏幕空间反射 | `关闭` / `低` / `中` / `高` / `极高` |
 | `video_quality_upscaler_2` | 画质提升 | `NVIDIA DLSS` / `TAAU` / `AMD FSR3` |
-| `video_quality_dlss_mode_1` | DLSS超分辨模式 | `DLAA` / `质量` / `平衡` / `性能` / `超级性能`（待标定） |
+| `video_quality_dlss_mode_1` | DLSS超分辨模式 | `DLAA` / `质量` / `平衡` / `性能` / `超级性能` |
 | `video_quality_sharpness_1` | 锐化程度 | 0.0 ~ 1.0（×1000 换算） |
-| `video_quality_framegen_1` | 帧生成 | `FSR3 Frame Generation` / `DLSS Frame Generation` / `关闭`（待标定） |
-| `video_quality_dlssg_mode_1` | DLSS帧生成模式 | `自动` / `2x` / `3x` / `4x`（待标定） |
-| `video_quality_reflex_1` | NVIDIA Reflex | `开启+增强` / `开启` / `关闭`（待标定） |
-| `video_quality_contactshadow_1` | 接触阴影 | `开` / `关`（待标定） |
-| `audio_suite_mode` | 输出模式 | `桌面音箱` / `家庭影院` / `电视` / `耳机`（仅 `耳机` 已标定） |
-| `audio_suspend_unfocused` | 非当前窗口时静音 | `开` / `关`（待标定） |
-| `audio_controller` | 控制器喇叭 | `开` / `关`（待标定） |
-| `audio_spatial` | 空间音频渲染 | `开` / `关`（待标定） |
-| `language_text_change` | 游戏语言 | 待确认（游戏内档位信息未提供，可填整数原始值） |
-| `language_audio` | 游戏语音 | `中文` / `英语` / `日语` / `韩语`（仅 `中文` 已标定） |
-| `controller_keyboard_type` | 键盘布局 | `默认` / `德语` / `法语`（待标定） |
+| `video_quality_framegen_1` | 帧生成 | `FSR3 Frame Generation` / `DLSS Frame Generation` / `关闭` |
+| `video_quality_dlssg_mode_1` | DLSS帧生成模式 | `自动` / `2x` / `3x` / `4x` |
+| `video_quality_reflex_1` | NVIDIA Reflex | `开启+增强` / `开启` / `关闭` |
+| `video_quality_contactshadow_1` | 接触阴影 | `开` / `关` |
+| `audio_suite_mode` | 输出模式 | `桌面音箱` / `家庭影院` / `电视` / `耳机` |
+| `audio_suspend_unfocused` | 非当前窗口时静音 | `开` / `关` |
+| `audio_controller` | 控制器喇叭 | `开` / `关` |
+| `audio_spatial` | 空间音频渲染 | `开` / `关` |
+| `language_text_change` | 游戏语言 | `简体中文` / `英语` / `日语` / `韩语` / `繁体中文` |
+| `language_audio` | 游戏语音 | `中文` / `英语` / `日语` / `韩语` |
+| `controller_keyboard_type` | 键盘布局 | `默认` / `德语` / `法语` |
 
 **显示模式**：游戏内的「显示模式」由两个注册表键组成——`video_full_screen` 与 `Screenmanager Fullscreen mode`。两者均已标定「窗口」；「全屏」下 `Screenmanager Fullscreen mode` 的原始值尚未标定，脚本会写入 `video_full_screen` 并跳过未标定的键（附警告）。
 
@@ -100,10 +100,9 @@
 
 ### 待标定档位
 
-部分档位的注册表原始值尚未逐一确认（表格中标注「待标定」）。选中未标定的档位时脚本会**报错退出**（退出码 1），并提示两种办法：
+全部档位映射均已标定，表格中的取值可直接使用。仅剩**显示模式「全屏」**下的 `Screenmanager Fullscreen mode` 键尚未标定：写「全屏」时脚本会写入 `video_full_screen` 并跳过该键（附警告）。补标定方法见下文「标定指南」。
 
-1. **`--read` 查看原始值**：把游戏内切到该档位，运行 `python endfield_config.py --read`，读取该设置的「原始」值，再把这个值填回 config（见下一条），或按「标定指南」回填到脚本映射表。
-2. **整数透传**：配置里直接填一个整数（如 `"帧生成": 1000`），脚本会**原样写入**注册表，不做任何换算。这是给高级用户 / 标定用的逃生通道，风险自负。
+**整数透传**仍保留为通用逃生通道：配置里直接填一个整数（如 `"帧生成": 1000`），脚本会**原样写入**注册表，不做任何换算。高级用户 / 未来新增档位时可用，风险自负。
 
 ### 重要行为
 
