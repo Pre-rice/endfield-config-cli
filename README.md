@@ -49,7 +49,7 @@
 
 ### 键与合法取值
 
-名称、取值和顺序皆与游戏内一致。「待标定」表示该档位的注册表原始值尚未确认，选中会报错（见下文「待标定档位」）。内部键名（左侧代码列）仅供对照，配置文件里写**中文键名**即可。
+名称、取值和顺序皆与游戏内一致。内部键名（左侧代码列）仅供对照，配置文件里写**中文键名**即可。
 
 | 内部键名 | 官方中文名 | 合法取值 |
 |---|---|---|
@@ -70,7 +70,7 @@
 | `video_quality_scene_detail_1` | 场景细节 | `低` / `中` / `高` / `极高` |
 | `video_quality_environment_renderfeature_1` | 环境细节 | `低` / `中` / `高` |
 | `video_quality_grass_sparsity_1` | 植被密度 | `低` / `高` |
-| `video_quality_chromatic_aberration_1` | 色差 | `开` / `关`（待标定） |
+| `video_quality_chromatic_aberration_1` | 色差 | `开` / `关` |
 | `video_quality_screenspacereflection_1` | 屏幕空间反射 | `关闭` / `低` / `中` / `高` / `极高` |
 | `video_quality_upscaler_2` | 画质提升 | `NVIDIA DLSS` / `TAAU` / `AMD FSR3` |
 | `video_quality_dlss_mode_1` | DLSS超分辨模式 | `DLAA` / `质量` / `平衡` / `性能` / `超级性能` |
@@ -98,7 +98,7 @@
 - **锐化程度**：按 ×1000 换算（游戏内 0.5 → 注册表 500）。
 - **画质档位**：各向异性 `x4` → 4000、帧率 `60` → 2000、画质提升 `NVIDIA DLSS` → 1000 等（映射见脚本 SETTINGS_TABLE）。
 
-### 待标定档位
+### 整数透传（逃生通道）
 
 全部档位映射（含显示模式「全屏」）均已标定，表格中的取值可直接使用。
 
