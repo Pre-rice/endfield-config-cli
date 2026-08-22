@@ -52,7 +52,7 @@ CONFIG_KEYS = [
     "video_quality_sharpness_1",        # 锐化程度
     "video_quality_framegen_1",         # 帧生成
     "video_quality_dlssg_mode_1",       # DLSS帧生成模式
-    "video_quality_reflex_1",           # NVIDIA Reflex
+    "video_quality_reflex_1",           # NVIDIA Reflex 低延迟
     "video_quality_contactshadow_1",    # 接触阴影
     "audio_suite_mode",                 # 输出模式
     "audio_suspend_unfocused",          # 非当前窗口时静音

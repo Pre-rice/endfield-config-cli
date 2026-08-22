@@ -6,6 +6,8 @@
 
 设置存储在 Windows 注册表 `HKEY_CURRENT_USER\SOFTWARE\Hypergryph\Endfield`（Unity PlayerPrefs，REG_DWORD）。注册表键名与游戏内显示不一致（如「帧率」=`video_frame_rate_8`），脚本内置映射表自动换算，可安全新增 / 修改设置键。
 
+实现方式参考原神的同类工具 [genshin-config-cli](https://github.com/Pre-rice/genshin-config-cli)
+
 ## 环境要求
 
 - Windows + Python 3
@@ -69,7 +71,7 @@
 | `video_quality_sharpness_1` | 锐化程度 | 0.0 ~ 1.0 |
 | `video_quality_framegen_1` | 帧生成 | `FSR3 Frame Generation` / `DLSS Frame Generation` / `关闭` |
 | `video_quality_dlssg_mode_1` | DLSS帧生成模式 | `自动` / `2x` / `3x` / `4x` |
-| `video_quality_reflex_1` | NVIDIA Reflex | `开启+增强` / `开启` / `关闭` |
+| `video_quality_reflex_1` | NVIDIA Reflex 低延迟 | `开启+增强` / `开启` / `关闭` |
 | `video_quality_contactshadow_1` | 接触阴影 | `开` / `关` |
 | `audio_suite_mode` | 输出模式 | `桌面音箱` / `家庭影院` / `电视` / `耳机` |
 | `audio_suspend_unfocused` | 非当前窗口时静音 | `开` / `关` |
