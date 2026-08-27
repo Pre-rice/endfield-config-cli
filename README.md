@@ -96,7 +96,7 @@
 
 注意：终末地运行中会把游戏内改动**实时写回**注册表，但只在**启动时读取**。因此运行中用脚本修改是安全的（不会被游戏退出覆盖），只是需重启游戏生效；之后在游戏内调整会覆盖脚本刚写入的对应键。
 
-实现方式参考原神的同类工具 [genshin-config-cli](https://github.com/Pre-rice/genshin-config-cli)
+实现方式参考原神的同类工具 [genshin-config-cli](https://github.com/Pre-rice/genshin-config-cli) 。
 
 ## 声明
 
